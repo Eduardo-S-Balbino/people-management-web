@@ -1,0 +1,177 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 850px;
+    margin: 40px auto;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    text-align: center;
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+.bloco {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #38bdf8;
+}
+
+.formulario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.linha-busca {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.formulario-busca {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+input {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #0ea5e9;
+}
+
+.lista-pessoas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-pessoa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #334155;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    gap: 15px;
+}
+
+.dados-pessoa {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.acoes {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.botao-editar {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+.botao-editar:hover {
+    background: #0ea5e9;
+}
+
+.botao-remover {
+    background: #ef4444;
+    color: white;
+}
+
+.botao-remover:hover {
+    background: #dc2626;
+}
+
+.botao-cancelar {
+    background: #64748b;
+    color: white;
+}
+
+.botao-cancelar:hover {
+    background: #475569;
+}
+
+.botao-limpar {
+    background: #2563eb;
+    color: white;
+}
+
+.botao-limpar:hover {
+    background: #1d4ed8;
+}
+
+.mensagens {
+    margin-bottom: 20px;
+}
+
+.mensagem {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.sucesso {
+    background: #14532d;
+    color: #dcfce7;
+}
+
+.erro {
+    background: #7f1d1d;
+    color: #fee2e2;
+}
+
+.vazio {
+    color: #cbd5e1;
+}

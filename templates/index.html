@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>People Management Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📋 People Management Web</h1>
+        <p class="subtitulo">Gerencie pessoas em uma aplicação web feita com Flask.</p>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                <div class="mensagens">
+                    {% for categoria, mensagem in mensagens %}
+                        <div class="mensagem {{ categoria }}">
+                            {{ mensagem }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="bloco">
+            {% if pessoa_em_edicao %}
+                <h2>Editar pessoa</h2>
+
+                <form action="/atualizar/{{ indice_em_edicao }}" method="post" class="formulario">
+                    <input type="text" name="nome" placeholder="Digite o nome" value="{{ pessoa_em_edicao.nome }}" required>
+                    <input type="text" name="idade" placeholder="Digite a idade" value="{{ pessoa_em_edicao.idade }}" required>
+                    <button type="submit">Salvar alterações</button>
+
+                    <form action="/" method="get">
+                        <button type="submit" class="botao-cancelar">Cancelar</button>
+                    </form>
+                </form>
+            {% else %}
+                <h2>Adicionar pessoa</h2>
+
+                <form action="/adicionar" method="post" class="formulario">
+                    <input type="text" name="nome" placeholder="Digite o nome" required>
+                    <input type="text" name="idade" placeholder="Digite a idade" required>
+                    <button type="submit">Adicionar</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="bloco">
+            <h2>Buscar pessoa</h2>
+
+            <div class="linha-busca">
+                <form action="/" method="get" class="formulario-busca">
+                    <input type="text" name="busca" placeholder="Digite um nome para buscar" value="{{ busca }}">
+                    <button type="submit">Buscar</button>
+                </form>
+
+                <form action="/" method="get">
+                    <button type="submit" class="botao-limpar">Limpar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bloco">
+            <h2>Pessoas cadastradas</h2>
+
+            {% if pessoas %}
+                <ul class="lista-pessoas">
+                    {% for pessoa in pessoas %}
+                        <li class="item-pessoa">
+                            <div class="dados-pessoa">
+                                <strong>{{ pessoa.nome }}</strong>
+                                <span>{{ pessoa.idade }} anos</span>
+                            </div>
+
+                            <div class="acoes">
+                                <form action="/" method="get">
+                                    <input type="hidden" name="editar" value="{{ pessoa.indice }}">
+                                    <button type="submit" class="botao-editar">Editar</button>
+                                </form>
+
+                                <form action="/remover/{{ pessoa.indice }}" method="post" onsubmit="return confirmarRemocao()">
+                                    <button type="submit" class="botao-remover">Remover</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="vazio">Nenhuma pessoa encontrada.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
