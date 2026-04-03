@@ -69,7 +69,7 @@ venv\Scripts\activate
 ### 3. Instalar dependências
 
 ```
-pip install flask flask-sqlalchemy
+pip install -r requirements.txt
 ```
 
 ### 4. Executar o projeto
