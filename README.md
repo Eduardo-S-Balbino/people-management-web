@@ -1,111 +1,132 @@
 # 📋 People Management Web
 
-Aplicação web desenvolvida com Flask para gerenciamento de pessoas, permitindo adicionar, buscar, editar e remover registros com persistência em arquivo JSON.
+Aplicação web desenvolvida com Flask para gerenciamento de pessoas, permitindo adicionar, buscar, editar e remover registros com persistência em banco de dados SQLite.
 
 ---
 
 ## 🚀 Funcionalidades
 
-- Adicionar pessoas (nome e idade)
+- Adicionar pessoas
 - Buscar pessoas por nome
-- Editar informações
-- Remover registros com confirmação
-- Persistência de dados em JSON
-- Feedback visual (mensagens de sucesso/erro)
-- Interface moderna com CSS
+- Editar dados de uma pessoa
+- Remover pessoas com confirmação
+- Persistência de dados com SQLite
+- Feedback visual com mensagens (Flash)
 
 ---
 
-## 🧠 Tecnologias utilizadas
+## 🛠️ Tecnologias utilizadas
 
 - Python
 - Flask
+- Flask-SQLAlchemy
 - HTML5
 - CSS3
 - JavaScript
-- JSON
+- SQLite
+- Git & GitHub
 
 ---
 
-## 📂 Estrutura do projeto
+## 📁 Estrutura do projeto
 
+```
 people-management-web/
-
-├── app.py  
-├── pessoas.json  
-
-├── templates/  
-│   └── index.html  
-
-├── static/  
-│   ├── style.css  
-│   └── script.js  
-
-└── README.md  
+│
+├── app.py
+├── pessoas.json (legado - pode ser removido)
+├── README.md
+│
+├── instance/
+│   └── pessoas.db
+│
+├── static/
+│   ├── style.css
+│   └── script.js
+│
+├── templates/
+│   └── index.html
+```
 
 ---
 
 ## ⚙️ Como executar o projeto
 
-1. Clonar o repositório
+### 1. Clonar o repositório
 
-git clone https://github.com/SEU-USUARIO/people-management-web.git  
-cd people-management-web  
+```
+git clone https://github.com/Eduardo-S-Balbino/people-management-web.git
+cd people-management-web
+```
 
-2. Instalar dependências
+### 2. Criar ambiente virtual (opcional, mas recomendado)
 
-pip install flask  
+```
+python -m venv venv
+venv\Scripts\activate
+```
 
-3. Executar a aplicação
+### 3. Instalar dependências
 
-python app.py  
+```
+pip install flask flask-sqlalchemy
+```
 
-4. Acessar no navegador
+### 4. Executar o projeto
 
-http://127.0.0.1:5000  
+```
+python app.py
+```
+
+### 5. Acessar no navegador
+
+```
+http://127.0.0.1:5000
+```
 
 ---
 
-## 📸 Demonstração
+## 🧠 Conceitos aplicados
 
-A aplicação possui:
-
-- Formulário para adicionar pessoas  
-- Sistema de busca por nome  
-- Lista dinâmica de pessoas cadastradas  
-- Botões de edição e remoção  
-- Interface moderna  
+- CRUD completo com Flask
+- Integração com banco de dados SQLite
+- ORM com SQLAlchemy
+- Templates com Jinja2
+- Separação entre backend e frontend
+- Manipulação de formulários
+- Feedback de ações com mensagens flash
+- Estrutura organizada de projeto
 
 ---
 
 ## 📈 Evolução do projeto
 
-Este projeto representa evolução com:
+Este projeto representa uma evolução prática de:
 
-- Transição de aplicações em terminal para web  
-- CRUD completo  
-- Separação backend/frontend  
-- Persistência de dados  
-- Melhor experiência do usuário  
+- armazenamento em JSON ➜ banco de dados SQLite  
+- operações simples ➜ CRUD completo  
+- interface básica ➜ interface estilizada e interativa  
 
 ---
 
-## 🔮 Melhorias futuras
+## 📌 Melhorias futuras
 
-- Banco de dados (SQLite)  
-- API REST  
-- Sistema de login  
-- Paginação  
-- Deploy  
+- Autenticação de usuários
+- API REST
+- Responsividade (mobile)
+- Testes automatizados
+- Deploy em nuvem (Render, Railway ou Vercel)
 
 ---
 
 ## 👨‍💻 Autor
 
-Eduardo da Silva Balbino  
+Eduardo da Silva Balbino
+
+Projeto desenvolvido como parte do portfólio para evolução em desenvolvimento web.
 
 ---
 
-## 📝 Licença
+## ⭐ Observação
 
-Projeto desenvolvido para fins de estudo e portfólio.
+Este projeto foi desenvolvido com foco em aprendizado prático e evolução contínua, demonstrando boas práticas iniciais de desenvolvimento web com Flask.
