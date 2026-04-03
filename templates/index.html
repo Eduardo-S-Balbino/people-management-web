@@ -27,19 +27,15 @@
             {% if pessoa_em_edicao %}
                 <h2>Editar pessoa</h2>
 
-                <form action="/atualizar/{{ indice_em_edicao }}" method="post" class="formulario">
+                <form action="{{ url_for('atualizar', id=pessoa_em_edicao.id) }}" method="post" class="formulario">
                     <input type="text" name="nome" placeholder="Digite o nome" value="{{ pessoa_em_edicao.nome }}" required>
                     <input type="text" name="idade" placeholder="Digite a idade" value="{{ pessoa_em_edicao.idade }}" required>
                     <button type="submit">Salvar alterações</button>
-
-                    <form action="/" method="get">
-                        <button type="submit" class="botao-cancelar">Cancelar</button>
-                    </form>
                 </form>
             {% else %}
                 <h2>Adicionar pessoa</h2>
 
-                <form action="/adicionar" method="post" class="formulario">
+                <form action="{{ url_for('adicionar') }}" method="post" class="formulario">
                     <input type="text" name="nome" placeholder="Digite o nome" required>
                     <input type="text" name="idade" placeholder="Digite a idade" required>
                     <button type="submit">Adicionar</button>
@@ -51,12 +47,12 @@
             <h2>Buscar pessoa</h2>
 
             <div class="linha-busca">
-                <form action="/" method="get" class="formulario-busca">
+                <form action="{{ url_for('home') }}" method="get" class="formulario-busca">
                     <input type="text" name="busca" placeholder="Digite um nome para buscar" value="{{ busca }}">
                     <button type="submit">Buscar</button>
                 </form>
 
-                <form action="/" method="get">
+                <form action="{{ url_for('home') }}" method="get">
                     <button type="submit" class="botao-limpar">Limpar</button>
                 </form>
             </div>
@@ -75,12 +71,11 @@
                             </div>
 
                             <div class="acoes">
-                                <form action="/" method="get">
-                                    <input type="hidden" name="editar" value="{{ pessoa.indice }}">
+                                <form action="{{ url_for('editar', id=pessoa.id) }}" method="get">
                                     <button type="submit" class="botao-editar">Editar</button>
                                 </form>
 
-                                <form action="/remover/{{ pessoa.indice }}" method="post" onsubmit="return confirmarRemocao()">
+                                <form action="{{ url_for('remover', id=pessoa.id) }}" method="post" onsubmit="return confirmarRemocao()">
                                     <button type="submit" class="botao-remover">Remover</button>
                                 </form>
                             </div>
