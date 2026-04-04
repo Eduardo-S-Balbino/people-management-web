@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -27,7 +28,7 @@ login_manager.login_view = "login"
 class Usuario(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
 
 class Pessoa(db.Model):
@@ -45,10 +46,18 @@ with app.app_context():
     db.create_all()
 
     usuario_existente = Usuario.query.filter_by(username="admin").first()
+
     if not usuario_existente:
-        usuario_padrao = Usuario(username="admin", password="1234")
+        usuario_padrao = Usuario(
+            username="admin",
+            password=generate_password_hash("1234")
+        )
         db.session.add(usuario_padrao)
         db.session.commit()
+    else:
+        if not usuario_existente.password.startswith("scrypt:") and not usuario_existente.password.startswith("pbkdf2:"):
+            usuario_existente.password = generate_password_hash(usuario_existente.password)
+            db.session.commit()
 
 
 def nome_valido(nome):
@@ -76,9 +85,9 @@ def login():
             flash("Preencha usuário e senha.", "erro")
             return redirect(url_for("login"))
 
-        usuario = Usuario.query.filter_by(username=username, password=password).first()
+        usuario = Usuario.query.filter_by(username=username).first()
 
-        if usuario:
+        if usuario and check_password_hash(usuario.password, password):
             login_user(usuario)
             flash("Login realizado com sucesso!", "sucesso")
             return redirect(url_for("home"))
@@ -86,7 +95,7 @@ def login():
             flash("Usuário ou senha inválidos.", "erro")
             return redirect(url_for("login"))
 
-    return render_template("login.html")
+    return render_template("login.html", mostrar_credenciais=app.debug)
 
 
 @app.route("/logout")
