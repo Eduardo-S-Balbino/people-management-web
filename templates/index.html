@@ -41,7 +41,7 @@
                         {% if pessoa_em_edicao %}
                             <h2 class="h4 mb-3">Editar pessoa</h2>
 
-                            <form action="{{ url_for('atualizar', id=pessoa_em_edicao.id) }}" method="post" class="row g-3">
+                            <form action="{{ url_for('atualizar', id=pessoa_em_edicao.id, busca=busca, pagina=paginacao.page) }}" method="post" class="row g-3">
                                 <div class="col-md-5">
                                     <input type="text" name="nome" class="form-control" placeholder="Digite o nome" value="{{ form_nome }}" required>
                                 </div>
@@ -116,7 +116,7 @@
                                                             <button type="submit" class="btn btn-info btn-sm fw-bold">Editar</button>
                                                         </form>
 
-                                                        <form action="{{ url_for('remover', id=pessoa.id) }}" method="post" onsubmit="return confirmarRemocao()">
+                                                        <form action="{{ url_for('remover', id=pessoa.id, busca=busca, pagina=paginacao.page) }}" method="post" onsubmit="return confirmarRemocao()">
                                                             <button type="submit" class="btn btn-danger btn-sm fw-bold">Remover</button>
                                                         </form>
                                                     </div>
@@ -129,15 +129,20 @@
 
                             {% if paginacao.pages > 1 %}
                                 <nav class="mt-4">
-                                    <ul class="pagination justify-content-center mb-0">
+                                    <ul class="pagination justify-content-center">
+
                                         <li class="page-item {% if not paginacao.has_prev %}disabled{% endif %}">
-                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.prev_num, busca=busca) if paginacao.has_prev else '#' }}">Anterior</a>
+                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.prev_num, busca=busca) if paginacao.has_prev else '#' }}">
+                                                Anterior
+                                            </a>
                                         </li>
 
                                         {% for numero in paginacao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                                             {% if numero %}
                                                 <li class="page-item {% if numero == paginacao.page %}active{% endif %}">
-                                                    <a class="page-link" href="{{ url_for('home', pagina=numero, busca=busca) }}">{{ numero }}</a>
+                                                    <a class="page-link" href="{{ url_for('home', pagina=numero, busca=busca) }}">
+                                                        {{ numero }}
+                                                    </a>
                                                 </li>
                                             {% else %}
                                                 <li class="page-item disabled">
@@ -147,8 +152,11 @@
                                         {% endfor %}
 
                                         <li class="page-item {% if not paginacao.has_next %}disabled{% endif %}">
-                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.next_num, busca=busca) if paginacao.has_next else '#' }}">Próxima</a>
+                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.next_num, busca=busca) if paginacao.has_next else '#' }}">
+                                                Próxima
+                                            </a>
                                         </li>
+
                                     </ul>
                                 </nav>
                             {% endif %}

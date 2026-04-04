@@ -118,7 +118,12 @@ def home():
     if busca:
         query = query.filter(Pessoa.nome.ilike(f"%{busca}%"))
 
-    paginacao = query.order_by(Pessoa.id.asc()).paginate(page=pagina, per_page=por_pagina, error_out=False)
+    paginacao = query.order_by(Pessoa.id.asc()).paginate(
+        page=pagina,
+        per_page=por_pagina,
+        error_out=False
+    )
+
     pessoas = paginacao.items
 
     return render_template(
@@ -172,7 +177,12 @@ def editar(id):
     if busca:
         query = query.filter(Pessoa.nome.ilike(f"%{busca}%"))
 
-    paginacao = query.order_by(Pessoa.id.asc()).paginate(page=pagina, per_page=por_pagina, error_out=False)
+    paginacao = query.order_by(Pessoa.id.asc()).paginate(
+        page=pagina,
+        per_page=por_pagina,
+        error_out=False
+    )
+
     pessoas = paginacao.items
 
     return render_template(
@@ -212,7 +222,7 @@ def atualizar(id):
     db.session.commit()
 
     flash("Pessoa atualizada com sucesso!", "sucesso")
-    return redirect(url_for("home"))
+    return redirect(url_for("home", pagina=request.args.get("pagina", 1), busca=request.args.get("busca", "")))
 
 
 @app.route("/remover/<int:id>", methods=["POST"])
@@ -223,7 +233,7 @@ def remover(id):
     db.session.commit()
 
     flash("Pessoa removida com sucesso!", "sucesso")
-    return redirect(url_for("home"))
+    return redirect(url_for("home", pagina=request.args.get("pagina", 1), busca=request.args.get("busca", "")))
 
 
 if __name__ == "__main__":
