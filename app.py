@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 
 app = Flask(__name__)
 app.secret_key = "chave-secreta"
@@ -9,6 +10,16 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+class Usuario(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
 
 class Pessoa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,11 +27,69 @@ class Pessoa(db.Model):
     idade = db.Column(db.Integer, nullable=False)
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
+
+
 with app.app_context():
     db.create_all()
 
+    usuario_existente = Usuario.query.filter_by(username="admin").first()
+    if not usuario_existente:
+        usuario_padrao = Usuario(username="admin", password="1234")
+        db.session.add(usuario_padrao)
+        db.session.commit()
+
+
+def nome_valido(nome):
+    return nome.strip() != ""
+
+
+def idade_valida(idade):
+    if not idade.isdigit():
+        return False
+
+    idade_numero = int(idade)
+    return 0 < idade_numero <= 120
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+
+    if request.method == "POST":
+        username = request.form["username"].strip()
+        password = request.form["password"].strip()
+
+        if username == "" or password == "":
+            flash("Preencha usuário e senha.", "erro")
+            return redirect(url_for("login"))
+
+        usuario = Usuario.query.filter_by(username=username, password=password).first()
+
+        if usuario:
+            login_user(usuario)
+            flash("Login realizado com sucesso!", "sucesso")
+            return redirect(url_for("home"))
+        else:
+            flash("Usuário ou senha inválidos.", "erro")
+            return redirect(url_for("login"))
+
+    return render_template("login.html")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Logout realizado com sucesso!", "sucesso")
+    return redirect(url_for("login"))
+
 
 @app.route("/")
+@login_required
 def home():
     busca = request.args.get("busca", "").strip()
 
@@ -33,21 +102,24 @@ def home():
         "index.html",
         pessoas=pessoas,
         busca=busca,
-        pessoa_em_edicao=None
+        pessoa_em_edicao=None,
+        form_nome="",
+        form_idade=""
     )
 
 
 @app.route("/adicionar", methods=["POST"])
+@login_required
 def adicionar():
     nome = request.form["nome"].strip()
     idade = request.form["idade"].strip()
 
-    if nome == "":
+    if not nome_valido(nome):
         flash("O nome não pode ficar vazio.", "erro")
         return redirect(url_for("home"))
 
-    if not idade.isdigit():
-        flash("A idade deve conter apenas números.", "erro")
+    if not idade_valida(idade):
+        flash("A idade deve ser um número entre 1 e 120.", "erro")
         return redirect(url_for("home"))
 
     pessoa_existente = Pessoa.query.filter(Pessoa.nome.ilike(nome)).first()
@@ -64,6 +136,7 @@ def adicionar():
 
 
 @app.route("/editar/<int:id>")
+@login_required
 def editar(id):
     pessoa = Pessoa.query.get_or_404(id)
     busca = request.args.get("busca", "").strip()
@@ -77,23 +150,26 @@ def editar(id):
         "index.html",
         pessoas=pessoas,
         busca=busca,
-        pessoa_em_edicao=pessoa
+        pessoa_em_edicao=pessoa,
+        form_nome=pessoa.nome,
+        form_idade=pessoa.idade
     )
 
 
 @app.route("/atualizar/<int:id>", methods=["POST"])
+@login_required
 def atualizar(id):
     pessoa = Pessoa.query.get_or_404(id)
 
     nome = request.form["nome"].strip()
     idade = request.form["idade"].strip()
 
-    if nome == "":
+    if not nome_valido(nome):
         flash("O nome não pode ficar vazio.", "erro")
         return redirect(url_for("editar", id=id))
 
-    if not idade.isdigit():
-        flash("A idade deve conter apenas números.", "erro")
+    if not idade_valida(idade):
+        flash("A idade deve ser um número entre 1 e 120.", "erro")
         return redirect(url_for("editar", id=id))
 
     pessoa_existente = Pessoa.query.filter(Pessoa.nome.ilike(nome), Pessoa.id != id).first()
@@ -110,6 +186,7 @@ def atualizar(id):
 
 
 @app.route("/remover/<int:id>", methods=["POST"])
+@login_required
 def remover(id):
     pessoa = Pessoa.query.get_or_404(id)
     db.session.delete(pessoa)
