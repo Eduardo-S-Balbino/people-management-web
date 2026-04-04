@@ -1,11 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+import os
 
 app = Flask(__name__)
 app.secret_key = "chave-secreta"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pessoas.db"
+database_url = os.getenv("DATABASE_URL")
+
+if database_url:
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pessoas.db"
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -92,11 +101,16 @@ def logout():
 @login_required
 def home():
     busca = request.args.get("busca", "").strip()
+    pagina = request.args.get("pagina", 1, type=int)
+    por_pagina = 5
+
+    query = Pessoa.query
 
     if busca:
-        pessoas = Pessoa.query.filter(Pessoa.nome.ilike(f"%{busca}%")).all()
-    else:
-        pessoas = Pessoa.query.all()
+        query = query.filter(Pessoa.nome.ilike(f"%{busca}%"))
+
+    paginacao = query.order_by(Pessoa.id.asc()).paginate(page=pagina, per_page=por_pagina, error_out=False)
+    pessoas = paginacao.items
 
     return render_template(
         "index.html",
@@ -104,7 +118,8 @@ def home():
         busca=busca,
         pessoa_em_edicao=None,
         form_nome="",
-        form_idade=""
+        form_idade="",
+        paginacao=paginacao
     )
 
 
@@ -140,11 +155,16 @@ def adicionar():
 def editar(id):
     pessoa = Pessoa.query.get_or_404(id)
     busca = request.args.get("busca", "").strip()
+    pagina = request.args.get("pagina", 1, type=int)
+    por_pagina = 5
+
+    query = Pessoa.query
 
     if busca:
-        pessoas = Pessoa.query.filter(Pessoa.nome.ilike(f"%{busca}%")).all()
-    else:
-        pessoas = Pessoa.query.all()
+        query = query.filter(Pessoa.nome.ilike(f"%{busca}%"))
+
+    paginacao = query.order_by(Pessoa.id.asc()).paginate(page=pagina, per_page=por_pagina, error_out=False)
+    pessoas = paginacao.items
 
     return render_template(
         "index.html",
@@ -152,7 +172,8 @@ def editar(id):
         busca=busca,
         pessoa_em_edicao=pessoa,
         form_nome=pessoa.nome,
-        form_idade=pessoa.idade
+        form_idade=pessoa.idade,
+        paginacao=paginacao
     )
 
 

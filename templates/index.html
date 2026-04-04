@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-md-4 d-flex gap-2">
                                     <button type="submit" class="btn btn-info fw-bold flex-fill">Salvar alterações</button>
-                                    <a href="{{ url_for('home') }}" class="btn btn-outline-light flex-fill">Cancelar</a>
+                                    <a href="{{ url_for('home', busca=busca, pagina=paginacao.page) }}" class="btn btn-outline-light flex-fill">Cancelar</a>
                                 </div>
                             </form>
                         {% else %}
@@ -112,7 +112,7 @@
                                                 <td>{{ pessoa.idade }} anos</td>
                                                 <td class="text-end">
                                                     <div class="d-inline-flex gap-2">
-                                                        <form action="{{ url_for('editar', id=pessoa.id) }}" method="get">
+                                                        <form action="{{ url_for('editar', id=pessoa.id, busca=busca, pagina=paginacao.page) }}" method="get">
                                                             <button type="submit" class="btn btn-info btn-sm fw-bold">Editar</button>
                                                         </form>
 
@@ -126,6 +126,32 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            {% if paginacao.pages > 1 %}
+                                <nav class="mt-4">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        <li class="page-item {% if not paginacao.has_prev %}disabled{% endif %}">
+                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.prev_num, busca=busca) if paginacao.has_prev else '#' }}">Anterior</a>
+                                        </li>
+
+                                        {% for numero in paginacao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                            {% if numero %}
+                                                <li class="page-item {% if numero == paginacao.page %}active{% endif %}">
+                                                    <a class="page-link" href="{{ url_for('home', pagina=numero, busca=busca) }}">{{ numero }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">...</span>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <li class="page-item {% if not paginacao.has_next %}disabled{% endif %}">
+                                            <a class="page-link" href="{{ url_for('home', pagina=paginacao.next_num, busca=busca) if paginacao.has_next else '#' }}">Próxima</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            {% endif %}
                         {% else %}
                             <p class="mb-0 text-light-emphasis">Nenhuma pessoa encontrada.</p>
                         {% endif %}
