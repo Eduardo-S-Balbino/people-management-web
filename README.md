@@ -1,128 +1,90 @@
 # 📋 People Management Web
 
-Aplicação web completa para gerenciamento de pessoas, desenvolvida com **Flask**, com autenticação, banco de dados relacional e deploy em produção.
+Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, banco de dados e deploy em produção.
 
 ---
 
-## 🚀 Acesse o projeto online
+## 🚀 Demonstração
 
+🔗 Acesse o sistema online:
 👉 https://people-management-web.onrender.com
 
 ---
 
-## 🧠 Sobre o projeto
+## 🧠 Funcionalidades
 
-O **People Management Web** é uma aplicação CRUD (Create, Read, Update, Delete) que permite gerenciar pessoas com nome e idade, com sistema de autenticação e interface moderna.
+* 🔐 Sistema de autenticação (login/logout)
+* 👤 CRUD completo de pessoas
 
-O projeto foi evoluído passo a passo até atingir um nível profissional, incluindo:
-
-* autenticação com sessão
-* proteção de rotas
-* banco PostgreSQL em produção
-* paginação de dados
-* validações completas
-* interface responsiva com Bootstrap
-
----
-
-## ⚙️ Funcionalidades
-
-### 🔐 Autenticação
-
-* Login de usuário
-* Logout
-* Proteção de rotas com Flask-Login
-* Redirecionamento automático para login
-
-### 👤 Gestão de Pessoas
-
-* Adicionar pessoa
-* Editar pessoa
-* Remover pessoa
-* Listagem completa
-
-### 🔎 Busca
-
-* Busca por nome com filtro dinâmico
-
-### 📄 Paginação
-
-* Exibição de 5 registros por página
-* Navegação entre páginas
-* Botões "Anterior" e "Próxima"
-
-### ✅ Validações
-
-* Nome não pode ser vazio
-* Idade deve ser número válido (1 a 120)
-* Evita duplicidade de nomes
-
-### 🔒 Segurança
-
-* Senhas protegidas com hash (`werkzeug.security`)
-* Sessão autenticada
-* Dados sensíveis protegidos
+  * Adicionar
+  * Editar
+  * Remover
+* 🔍 Busca por nome
+* 📄 Paginação de resultados
+* ⚠️ Validação de dados (nome e idade)
+* 🔒 Senhas armazenadas com hash seguro
+* 🧾 Mensagens de feedback para o usuário
+* 🖱️ Confirmação antes de remover registros
+* ⏳ Botões com estado de carregamento (UX melhorada)
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## 🏗️ Arquitetura do Projeto
+
+O projeto segue uma organização modular inspirada em boas práticas:
+
+```
+app/
+│
+├── __init__.py        # Criação da aplicação (factory)
+├── models.py          # Modelos do banco de dados
+├── routes.py          # Rotas principais (CRUD)
+├── auth.py            # Autenticação
+├── services/          # Camada de lógica de negócio
+│   └── pessoa_service.py
+│
+├── static/            # Arquivos estáticos (CSS, JS)
+├── templates/         # Templates HTML (Jinja2)
+│
+instance/
+└── pessoas.db         # Banco SQLite local
+
+config.py              # Configurações da aplicação
+run.py                 # Inicialização do servidor
+requirements.txt       # Dependências
+```
+
+---
+
+## 🧩 Tecnologias utilizadas
 
 * Python
 * Flask
-* Flask-SQLAlchemy
 * Flask-Login
-* SQLite (ambiente local)
-* PostgreSQL (produção)
+* Flask-SQLAlchemy
 * Jinja2
-* HTML5
-* CSS3
 * Bootstrap 5
-* JavaScript
-* Gunicorn (produção)
+* SQLite (desenvolvimento)
+* PostgreSQL (produção)
 * Render (deploy)
 
 ---
 
-## 🗄️ Banco de dados
+## 🔐 Segurança
 
-O projeto utiliza dois bancos:
-
-* **SQLite** → ambiente local
-* **PostgreSQL** → produção (Render)
-
-A troca é feita automaticamente via variável de ambiente:
-
-```python
-DATABASE_URL
-```
+* Senhas armazenadas com hash (`werkzeug.security`)
+* `SECRET_KEY` configurada via variável de ambiente
+* Proteção de rotas com `login_required`
+* Sessões seguras
 
 ---
 
-## 📦 Estrutura do projeto
+## ⚙️ Como rodar localmente
 
-```
-people-management-web/
-│
-├── app.py
-├── requirements.txt
-├── README.md
-│
-├── templates/
-│   ├── index.html
-│   └── login.html
-│
-├── static/
-│   └── script.js
-```
-
----
-
-## ▶️ Como rodar o projeto localmente
-
-### 1. Clonar o repositório
+### 1. Clonar o projeto
 
 ```bash
-git clone https://github.com/Eduardo-S-Balbino/people-management-web.git
+git clone https://github.com/seu-usuario/people-management-web.git
 cd people-management-web
 ```
 
@@ -132,12 +94,7 @@ cd people-management-web
 
 ```bash
 python -m venv venv
-```
-
-Ativar:
-
-```bash
-venv\Scripts\activate
+venv\Scripts\activate  # Windows
 ```
 
 ---
@@ -150,15 +107,23 @@ pip install -r requirements.txt
 
 ---
 
-### 4. Rodar o projeto
+### 4. Definir variáveis de ambiente (opcional)
 
 ```bash
-python app.py
+set FLASK_ENV=development
 ```
 
 ---
 
-### 5. Acessar no navegador
+### 5. Rodar aplicação
+
+```bash
+python run.py
+```
+
+---
+
+### 6. Acessar no navegador
 
 ```text
 http://127.0.0.1:5000
@@ -166,56 +131,42 @@ http://127.0.0.1:5000
 
 ---
 
-## 🔑 Usuário padrão
+## 🔑 Credenciais padrão (somente desenvolvimento)
 
-Para testes locais:
-
-```
+```text
 Usuário: admin
 Senha: 1234
 ```
-
-⚠️ Em produção, as credenciais não são exibidas por segurança.
 
 ---
 
 ## 🌐 Deploy
 
-O projeto está hospedado na **Render** com:
+A aplicação está hospedada na Render com:
 
-* Web Service (Flask + Gunicorn)
 * Banco PostgreSQL
 * Variáveis de ambiente configuradas
+* Build automático via GitHub
 
 ---
 
-## 📈 Melhorias implementadas
+## 📈 Evolução do Projeto
 
-* Interface moderna com Bootstrap
-* Sistema de autenticação completo
-* Migração para PostgreSQL
-* Paginação de dados
-* Validações robustas
-* Segurança com hash de senha
+Este projeto evoluiu progressivamente, incluindo:
 
----
-
-## 🚀 Próximas melhorias
-
-* Cadastro de novos usuários
-* Recuperação de senha
-* Upload de imagens
-* API REST
-* Modularização do projeto
-* Testes automatizados
+* Estrutura inicial com Flask
+* Implementação de autenticação
+* Validações completas
+* Paginação
+* Refatoração para camada de serviço
+* Melhorias de UX (feedback visual e loading)
+* Deploy em produção
 
 ---
 
 ## 👨‍💻 Autor
 
-Desenvolvido por:
-
-**Eduardo da Silva Balbino**
+Desenvolvido por **Eduardo da Silva Balbino**
 
 ---
 
