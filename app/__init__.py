@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
 from config import Config
 
 db = SQLAlchemy()
@@ -27,9 +28,20 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(auth)
 
-    # 🔥 ESSENCIAL: carregar usuário da sessão
     @login_manager.user_loader
     def load_user(user_id):
         return Usuario.query.get(int(user_id))
+
+    with app.app_context():
+        db.create_all()
+
+        admin = Usuario.query.filter_by(username="admin").first()
+        if not admin:
+            admin = Usuario(
+                username="admin",
+                password=generate_password_hash("1234")
+            )
+            db.session.add(admin)
+            db.session.commit()
 
     return app
