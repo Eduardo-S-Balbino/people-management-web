@@ -1,142 +1,115 @@
 # 📋 People Management Web
 
-Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, banco de dados e deploy em produção.
+Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, busca, validações e deploy em produção.
 
 ---
 
 ## 🚀 Demonstração
 
-🔗 Acesse o sistema online:
+Acesse o sistema online:  
 👉 https://people-management-web.onrender.com
 
 ---
 
 ## 🧠 Funcionalidades
 
-* 🔐 Sistema de autenticação (login/logout)
-* 👤 CRUD completo de pessoas
-
-  * Adicionar
-  * Editar
-  * Remover
-* 🔍 Busca por nome
-* 📄 Paginação de resultados
-* ⚠️ Validação de dados (nome e idade)
-* 🔒 Senhas armazenadas com hash seguro
-* 🧾 Mensagens de feedback para o usuário
-* 🖱️ Confirmação antes de remover registros
-* ⏳ Botões com estado de carregamento (UX melhorada)
+- 🔐 Sistema de autenticação de usuários (login/logout)
+- 👤 CRUD completo de pessoas
+  - Adicionar
+  - Editar
+  - Remover
+- 🔍 Busca por nome
+- 📄 Paginação de resultados
+- ⚠️ Validação de dados (nome e idade)
+- 🔒 Senhas armazenadas com hash seguro
+- 🧾 Mensagens de feedback para o usuário
+- 🖱️ Confirmação antes de remover registros
+- ⏳ Botões com estado de carregamento para melhor experiência do usuário
 
 ---
 
 ## 🏗️ Arquitetura do Projeto
 
-O projeto segue uma organização modular inspirada em boas práticas:
+O projeto segue uma organização modular inspirada em boas práticas de desenvolvimento:
 
-```
-app/
-│
-├── __init__.py        # Criação da aplicação (factory)
-├── models.py          # Modelos do banco de dados
-├── routes.py          # Rotas principais (CRUD)
-├── auth.py            # Autenticação
-├── services/          # Camada de lógica de negócio
-│   └── pessoa_service.py
-│
-├── static/            # Arquivos estáticos (CSS, JS)
-├── templates/         # Templates HTML (Jinja2)
-│
-instance/
-└── pessoas.db         # Banco SQLite local
+    app/
+    │
+    ├── __init__.py        # Criação da aplicação (Application Factory)
+    ├── models.py          # Modelos do banco de dados
+    ├── routes.py          # Rotas principais do CRUD
+    ├── auth.py            # Rotas de autenticação
+    ├── services/          # Camada de lógica de negócio
+    │   └── pessoa_service.py
+    │
+    ├── static/            # Arquivos estáticos (CSS, JS)
+    ├── templates/         # Templates HTML (Jinja2)
+    │
+    instance/
+    └── pessoas.db         # Banco SQLite local
 
-config.py              # Configurações da aplicação
-run.py                 # Inicialização do servidor
-requirements.txt       # Dependências
-```
+    config.py              # Configurações da aplicação
+    run.py                 # Inicialização do servidor
+    requirements.txt       # Dependências do projeto
 
 ---
 
-## 🧩 Tecnologias utilizadas
+## 🧩 Tecnologias Utilizadas
 
-* Python
-* Flask
-* Flask-Login
-* Flask-SQLAlchemy
-* Jinja2
-* Bootstrap 5
-* SQLite (desenvolvimento)
-* PostgreSQL (produção)
-* Render (deploy)
+- Python
+- Flask
+- Flask-Login
+- Flask-SQLAlchemy
+- Jinja2
+- Bootstrap 5
+- SQLite (desenvolvimento)
+- PostgreSQL (produção)
+- Render (deploy)
 
 ---
 
 ## 🔐 Segurança
 
-* Senhas armazenadas com hash (`werkzeug.security`)
-* `SECRET_KEY` configurada via variável de ambiente
-* Proteção de rotas com `login_required`
-* Sessões seguras
+- Senhas armazenadas com hash usando `werkzeug.security`
+- `SECRET_KEY` configurada por variável de ambiente
+- Proteção de rotas com `login_required`
+- Gerenciamento seguro de sessão
 
 ---
 
-## ⚙️ Como rodar localmente
+## ⚙️ Como Rodar Localmente
 
-### 1. Clonar o projeto
+### 1. Clone o repositório
 
-```bash
-git clone https://github.com/seu-usuario/people-management-web.git
-cd people-management-web
-```
+    git clone https://github.com/Eduardo-S-Balbino/people-management-web.git
+    cd people-management-web
 
----
+### 2. Crie o ambiente virtual
 
-### 2. Criar ambiente virtual
+    python -m venv venv
+    venv\Scripts\activate
 
-```bash
-python -m venv venv
-venv\Scripts\activate  # Windows
-```
+### 3. Instale as dependências
 
----
+    pip install -r requirements.txt
 
-### 3. Instalar dependências
+### 4. Defina as variáveis de ambiente (opcional)
 
-```bash
-pip install -r requirements.txt
-```
+    set FLASK_ENV=development
 
----
+### 5. Execute a aplicação
 
-### 4. Definir variáveis de ambiente (opcional)
+    python run.py
 
-```bash
-set FLASK_ENV=development
-```
+### 6. Acesse no navegador
+
+    http://127.0.0.1:5000
 
 ---
 
-### 5. Rodar aplicação
+## 🔑 Credenciais Padrão (Somente Desenvolvimento)
 
-```bash
-python run.py
-```
-
----
-
-### 6. Acessar no navegador
-
-```text
-http://127.0.0.1:5000
-```
-
----
-
-## 🔑 Credenciais padrão (somente desenvolvimento)
-
-```text
-Usuário: admin
-Senha: 1234
-```
+    Usuário: admin
+    Senha: 1234
 
 ---
 
@@ -144,23 +117,23 @@ Senha: 1234
 
 A aplicação está hospedada na Render com:
 
-* Banco PostgreSQL
-* Variáveis de ambiente configuradas
-* Build automático via GitHub
+- Banco PostgreSQL
+- Variáveis de ambiente configuradas
+- Deploy automático via GitHub
 
 ---
 
 ## 📈 Evolução do Projeto
 
-Este projeto evoluiu progressivamente, incluindo:
+Este projeto foi evoluindo progressivamente com a implementação de melhorias como:
 
-* Estrutura inicial com Flask
-* Implementação de autenticação
-* Validações completas
-* Paginação
-* Refatoração para camada de serviço
-* Melhorias de UX (feedback visual e loading)
-* Deploy em produção
+- Estrutura inicial com Flask
+- Sistema de autenticação
+- Validações completas
+- Paginação
+- Refatoração para camada de serviço
+- Melhorias de UX com feedback visual e loading
+- Deploy em produção
 
 ---
 
@@ -168,8 +141,12 @@ Este projeto evoluiu progressivamente, incluindo:
 
 Desenvolvido por **Eduardo da Silva Balbino**
 
+- GitHub: https://github.com/Eduardo-S-Balbino
+- LinkedIn: https://www.linkedin.com/in/eduardo-da-silva-balbino-1611b3401/
+- Portfólio: https://portfolio-ekgq.onrender.com/
+
 ---
 
 ## 📄 Licença
 
-Este projeto é de uso educacional e para portfólio.
+Este projeto foi criado para fins educacionais e de portfólio.
