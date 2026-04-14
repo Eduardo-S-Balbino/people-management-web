@@ -11,6 +11,19 @@ Acesse o sistema online:
 
 ---
 
+## 🖼️ Screenshots
+
+### Login
+![Login](assets/images/login.png)
+
+### Dashboard
+![Dashboard](assets/images/dashboard.png)
+
+### Edit Person
+![Edit Person](assets/images/edit-person.png)
+
+---
+
 ## 🧠 Funcionalidades
 
 - 🔐 Sistema de autenticação de usuários (login/logout)
@@ -43,9 +56,6 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
     │
     ├── static/            # Arquivos estáticos (CSS, JS)
     ├── templates/         # Templates HTML (Jinja2)
-    │
-    instance/
-    └── pessoas.db         # Banco SQLite local
 
     config.py              # Configurações da aplicação
     run.py                 # Inicialização do servidor
