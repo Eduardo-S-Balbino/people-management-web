@@ -1,6 +1,6 @@
 # 📋 People Management Web
 
-Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, busca, validações e deploy em produção.
+Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, busca, validações, testes básicos e deploy em produção.
 
 ---
 
@@ -33,11 +33,13 @@ Acesse o sistema online:
   - Remover
 - 🔍 Busca por nome
 - 📄 Paginação de resultados
-- ⚠️ Validação de dados (nome e idade)
+- ⚠️ Validação de dados
 - 🔒 Senhas armazenadas com hash seguro
 - 🧾 Mensagens de feedback para o usuário
 - 🖱️ Confirmação antes de remover registros
 - ⏳ Botões com estado de carregamento para melhor experiência do usuário
+- 🧪 Testes básicos para a camada de serviço
+- 🌐 Deploy funcional em produção com Render
 
 ---
 
@@ -54,12 +56,19 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
     ├── services/          # Camada de lógica de negócio
     │   └── pessoa_service.py
     │
+    ├── tests/             # Testes básicos da aplicação
+    │   └── test_pessoa_service.py
+    │
     ├── static/            # Arquivos estáticos (CSS, JS)
     ├── templates/         # Templates HTML (Jinja2)
+    │
+    assets/
+    └── images/            # Screenshots do projeto
 
     config.py              # Configurações da aplicação
-    run.py                 # Inicialização do servidor
+    run.py                 # Inicialização local do servidor
     requirements.txt       # Dependências do projeto
+    .gitignore             # Arquivos e pastas ignorados pelo Git
 
 ---
 
@@ -71,9 +80,12 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
 - Flask-SQLAlchemy
 - Jinja2
 - Bootstrap 5
-- SQLite (desenvolvimento)
-- PostgreSQL (produção)
-- Render (deploy)
+- SQLite
+- PostgreSQL
+- Gunicorn
+- Render
+- unittest
+- unittest.mock
 
 ---
 
@@ -83,6 +95,20 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
 - `SECRET_KEY` configurada por variável de ambiente
 - Proteção de rotas com `login_required`
 - Gerenciamento seguro de sessão
+
+---
+
+## 🧪 Testes
+
+O projeto possui testes básicos automatizados para a camada de serviço de pessoas, cobrindo:
+
+- criação de pessoa
+- atualização de pessoa
+- remoção de pessoa
+
+### Rodar os testes
+
+    python -m unittest app.tests.test_pessoa_service
 
 ---
 
@@ -116,7 +142,9 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
 
 ---
 
-## 🔑 Credenciais Padrão (Somente Desenvolvimento)
+## 🔑 Credenciais Padrão
+
+Para facilitar o primeiro acesso, a aplicação pode criar automaticamente um usuário administrador padrão quando o banco ainda não possui esse registro:
 
     Usuário: admin
     Senha: 1234
@@ -125,25 +153,38 @@ O projeto segue uma organização modular inspirada em boas práticas de desenvo
 
 ## 🌐 Deploy
 
-A aplicação está hospedada na Render com:
+A aplicação está hospedada na Render e passou por ajustes reais de produção durante o processo de deploy.
 
-- Banco PostgreSQL
-- Variáveis de ambiente configuradas
-- Deploy automático via GitHub
+### Principais pontos do deploy
+
+- configuração do servidor com Gunicorn
+- uso do padrão Application Factory com `create_app()`
+- ajuste do Start Command na Render para iniciar corretamente a aplicação
+- criação automática das tabelas no startup com `db.create_all()`
+- criação automática do usuário `admin` quando o banco ainda está vazio
+- deploy estabilizado com sucesso após correção de inicialização e banco de dados
+
+### Start Command utilizado na Render
+
+    gunicorn "app:create_app()"
 
 ---
 
 ## 📈 Evolução do Projeto
 
-Este projeto foi evoluindo progressivamente com a implementação de melhorias como:
+Este projeto evoluiu progressivamente com a implementação de melhorias como:
 
-- Estrutura inicial com Flask
-- Sistema de autenticação
-- Validações completas
-- Paginação
-- Refatoração para camada de serviço
-- Melhorias de UX com feedback visual e loading
-- Deploy em produção
+- estrutura inicial com Flask
+- sistema de autenticação
+- validações completas
+- paginação
+- refatoração para camada de serviço
+- melhorias de UX com feedback visual e loading
+- limpeza e organização do repositório com `.gitignore`
+- screenshots no README
+- testes básicos automatizados
+- melhoria visual da interface
+- correção de deploy em produção na Render
 
 ---
 
