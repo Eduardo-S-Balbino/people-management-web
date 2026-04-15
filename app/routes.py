@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required
 from .models import Pessoa
 from app.services.pessoa_service import criar_pessoa, atualizar_pessoa, remover_pessoa
@@ -47,6 +47,22 @@ def home():
         form_idade="",
         paginacao=paginacao
     )
+
+
+@main.route("/api/pessoas", methods=["GET"])
+@login_required
+def listar_pessoas_api():
+    pessoas = Pessoa.query.order_by(Pessoa.id.asc()).all()
+
+    resultado = []
+    for pessoa in pessoas:
+        resultado.append({
+            "id": pessoa.id,
+            "nome": pessoa.nome,
+            "idade": pessoa.idade
+        })
+
+    return jsonify(resultado), 200
 
 
 @main.route("/adicionar", methods=["POST"])
