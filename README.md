@@ -1,6 +1,6 @@
 # 📋 People Management Web
 
-Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, busca, validações, testes básicos e deploy em produção.
+Aplicação web desenvolvida com Flask para gerenciamento de pessoas, com autenticação de usuários, CRUD completo, paginação, busca, validações, testes básicos, API REST CRUD e deploy em produção.
 
 ---
 
@@ -27,10 +27,16 @@ Acesse o sistema online:
 ## 🧠 Funcionalidades
 
 - 🔐 Sistema de autenticação de usuários (login/logout)
-- 👤 CRUD completo de pessoas
+- 👤 CRUD completo de pessoas pela interface web
   - Adicionar
   - Editar
   - Remover
+- 🌐 API REST CRUD completa
+  - Listar pessoas
+  - Buscar pessoa por ID
+  - Criar pessoa
+  - Atualizar pessoa
+  - Remover pessoa
 - 🔍 Busca por nome
 - 📄 Paginação de resultados
 - ⚠️ Validação de dados
@@ -47,28 +53,32 @@ Acesse o sistema online:
 
 O projeto segue uma organização modular inspirada em boas práticas de desenvolvimento:
 
-    app/
+    people-management-web/
     │
-    ├── __init__.py        # Criação da aplicação (Application Factory)
-    ├── models.py          # Modelos do banco de dados
-    ├── routes.py          # Rotas principais do CRUD
-    ├── auth.py            # Rotas de autenticação
-    ├── services/          # Camada de lógica de negócio
-    │   └── pessoa_service.py
+    ├── app/
+    │   ├── __init__.py        # Criação da aplicação (Application Factory)
+    │   ├── models.py          # Modelos do banco de dados
+    │   ├── routes.py          # Rotas do CRUD web e da API
+    │   ├── auth.py            # Rotas de autenticação
+    │   ├── services/          # Camada de lógica de negócio
+    │   │   └── pessoa_service.py
+    │   │
+    │   └── tests/            # Testes básicos da aplicação
+    │       └── test_pessoa_service.py
     │
-    ├── tests/             # Testes básicos da aplicação
-    │   └── test_pessoa_service.py
+    ├── static/               # Arquivos estáticos (CSS, JS)
+    ├── templates/            # Templates HTML (Jinja2)
     │
-    ├── static/            # Arquivos estáticos (CSS, JS)
-    ├── templates/         # Templates HTML (Jinja2)
+    ├── assets/
+    │   └── images/           # Screenshots do projeto
     │
-    assets/
-    └── images/            # Screenshots do projeto
-
-    config.py              # Configurações da aplicação
-    run.py                 # Inicialização local do servidor
-    requirements.txt       # Dependências do projeto
-    .gitignore             # Arquivos e pastas ignorados pelo Git
+    ├── instance/
+    │   └── pessoas.db
+    │
+    ├── config.py             # Configurações da aplicação
+    ├── run.py                # Inicialização local do servidor
+    ├── requirements.txt      # Dependências do projeto
+    └── .gitignore            # Arquivos e pastas ignorados pelo Git
 
 ---
 
@@ -122,21 +132,26 @@ O projeto possui testes básicos automatizados para a camada de serviço de pess
 ### 2. Crie o ambiente virtual
 
     python -m venv venv
+
+### 3. Ative o ambiente virtual
+
+No Windows:
+
     venv\Scripts\activate
 
-### 3. Instale as dependências
+### 4. Instale as dependências
 
     pip install -r requirements.txt
 
-### 4. Defina as variáveis de ambiente (opcional)
+### 5. Defina as variáveis de ambiente (opcional)
 
     set FLASK_ENV=development
 
-### 5. Execute a aplicação
+### 6. Execute a aplicação
 
     python run.py
 
-### 6. Acesse no navegador
+### 7. Acesse no navegador
 
     http://127.0.0.1:5000
 
@@ -148,6 +163,103 @@ Para facilitar o primeiro acesso, a aplicação pode criar automaticamente um us
 
     Usuário: admin
     Senha: 1234
+
+---
+
+## 🌐 API REST
+
+A aplicação também possui uma API REST integrada, permitindo manipular os registros de pessoas via JSON.
+
+### Endpoints disponíveis
+
+#### Listar todas as pessoas
+
+    GET /api/pessoas
+
+#### Buscar pessoa por ID
+
+    GET /api/pessoas/<id>
+
+#### Criar nova pessoa
+
+    POST /api/pessoas
+
+Exemplo de JSON enviado:
+
+    {
+      "nome": "Carlos",
+      "idade": 25
+    }
+
+#### Atualizar pessoa
+
+    PUT /api/pessoas/<id>
+
+Exemplo de JSON enviado:
+
+    {
+      "nome": "Carlos Silva",
+      "idade": 26
+    }
+
+#### Remover pessoa
+
+    DELETE /api/pessoas/<id>
+
+---
+
+## 📬 Exemplos de Resposta da API
+
+### GET /api/pessoas
+
+    [
+      {
+        "id": 1,
+        "nome": "Sônia",
+        "idade": 60
+      },
+      {
+        "id": 2,
+        "nome": "Marcos",
+        "idade": 28
+      }
+    ]
+
+### GET /api/pessoas/1
+
+    {
+      "id": 1,
+      "nome": "Sônia",
+      "idade": 60
+    }
+
+### POST /api/pessoas
+
+    {
+      "mensagem": "Pessoa criada com sucesso!",
+      "pessoa": {
+        "id": 3,
+        "nome": "Carlos",
+        "idade": 25
+      }
+    }
+
+### PUT /api/pessoas/1
+
+    {
+      "mensagem": "Pessoa atualizada com sucesso!",
+      "pessoa": {
+        "id": 1,
+        "nome": "Sônia Silva",
+        "idade": 61
+      }
+    }
+
+### DELETE /api/pessoas/1
+
+    {
+      "mensagem": "Pessoa removida com sucesso!"
+    }
 
 ---
 
@@ -185,6 +297,23 @@ Este projeto evoluiu progressivamente com a implementação de melhorias como:
 - testes básicos automatizados
 - melhoria visual da interface
 - correção de deploy em produção na Render
+- implementação de API REST CRUD completa
+
+---
+
+## 📚 Aprendizados
+
+Durante o desenvolvimento deste projeto, foram praticados conceitos importantes como:
+
+- organização de projeto Flask com estrutura modular
+- separação entre rotas, modelos e serviços
+- autenticação com Flask-Login
+- uso de banco de dados com SQLAlchemy
+- criação e consumo de API REST
+- testes automatizados com `unittest`
+- tratamento de validações e erros
+- deploy de aplicação Python na Render
+- fluxo de versionamento com Git e GitHub
 
 ---
 
