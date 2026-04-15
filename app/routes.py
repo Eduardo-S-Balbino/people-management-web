@@ -65,6 +65,20 @@ def listar_pessoas_api():
     return jsonify(resultado), 200
 
 
+@main.route("/api/pessoas/<int:id>", methods=["GET"])
+@login_required
+def buscar_pessoa_api(id):
+    pessoa = Pessoa.query.get_or_404(id)
+
+    resultado = {
+        "id": pessoa.id,
+        "nome": pessoa.nome,
+        "idade": pessoa.idade
+    }
+
+    return jsonify(resultado), 200
+
+
 @main.route("/adicionar", methods=["POST"])
 @login_required
 def adicionar():
