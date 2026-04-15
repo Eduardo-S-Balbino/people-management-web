@@ -111,6 +111,43 @@ def criar_pessoa_api():
     }), 201
 
 
+@main.route("/api/pessoas/<int:id>", methods=["PUT"])
+def atualizar_pessoa_api(id):
+    pessoa = Pessoa.query.get_or_404(id)
+    dados = request.get_json()
+
+    if not dados:
+        return jsonify({"erro": "JSON inválido ou não enviado."}), 400
+
+    nome = str(dados.get("nome", "")).strip()
+    idade = str(dados.get("idade", "")).strip()
+
+    if not nome_valido(nome):
+        return jsonify({"erro": "O nome não pode ficar vazio."}), 400
+
+    if not idade_valida(idade):
+        return jsonify({"erro": "A idade deve ser um número entre 1 e 120."}), 400
+
+    pessoa_existente = Pessoa.query.filter(
+        Pessoa.nome.ilike(nome),
+        Pessoa.id != id
+    ).first()
+
+    if pessoa_existente:
+        return jsonify({"erro": "Já existe outra pessoa cadastrada com esse nome."}), 409
+
+    pessoa_atualizada = atualizar_pessoa(pessoa, nome, int(idade))
+
+    return jsonify({
+        "mensagem": "Pessoa atualizada com sucesso!",
+        "pessoa": {
+            "id": pessoa_atualizada.id,
+            "nome": pessoa_atualizada.nome,
+            "idade": pessoa_atualizada.idade
+        }
+    }), 200
+
+
 @main.route("/adicionar", methods=["POST"])
 @login_required
 def adicionar():
