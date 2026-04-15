@@ -148,6 +148,17 @@ def atualizar_pessoa_api(id):
     }), 200
 
 
+@main.route("/api/pessoas/<int:id>", methods=["DELETE"])
+def remover_pessoa_api(id):
+    pessoa = Pessoa.query.get_or_404(id)
+
+    remover_pessoa(pessoa)
+
+    return jsonify({
+        "mensagem": "Pessoa removida com sucesso!"
+    }), 200
+
+
 @main.route("/adicionar", methods=["POST"])
 @login_required
 def adicionar():
